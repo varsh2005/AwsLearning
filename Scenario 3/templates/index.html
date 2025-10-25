@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Dynamic Pricing</title>
+    <style>
+        body { font-family: Arial; text-align: center; padding: 50px; }
+        input { margin: 5px; padding: 5px; width: 150px; }
+        button { padding: 10px 20px; margin: 10px; }
+        .result { font-size: 1.5em; margin-top: 20px; color: green; }
+    </style>
+</head>
+<body>
+    <h1>AI Dynamic Pricing Tool</h1>
+    <form method="POST">
+        <input type="number" name="base_price" placeholder="Base Price" step="0.01" required><br>
+        <input type="number" name="demand" placeholder="Demand" step="0.01" required><br>
+        <input type="number" name="competition_price" placeholder="Competitor Price" step="0.01" required><br>
+        <input type="number" name="time_of_day" placeholder="Time of Day (0-23)" step="1" required><br>
+        <input type="number" name="day_of_week" placeholder="Day of Week (0-6)" step="1" required><br>
+        <button type="submit">Predict Price</button>
+    </form>
+
+    {% if suggested_price is not none %}
+        <div class="result">Suggested Price: {{ suggested_price }}</div>
+    {% endif %}
+</body>
+</html>
