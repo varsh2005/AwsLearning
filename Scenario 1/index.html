@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SimpleShop — Static E-commerce Page</title>
+  <meta name="description" content="Simple static e-commerce demo page (responsive product grid, hero, navbar)" />
+  <style>
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --accent:#0b74de;
+      --muted:#6b7280;
+      --radius:12px;
+      --shadow: 0 6px 18px rgba(11,116,222,0.08);
+      --max-width:1100px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,#f6f7fb 0%, #eef3fb 100%);
+      color:#111827;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:32px 16px;
+      display:flex;
+      justify-content:center;
+    }
+    .container{
+      width:100%;
+      max-width:var(--max-width);
+    }
+
+    /* NAV */
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:22px;
+    }
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      text-decoration:none;
+      color:inherit;
+    }
+    .logo{
+      width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#36a3ff);
+      display:flex;align-items:center;justify-content:center;color:white;font-weight:700;box-shadow:var(--shadow);
+    }
+    .nav-right{display:flex;gap:12px;align-items:center;}
+    .search{
+      display:flex;align-items:center;background:var(--card);padding:8px 12px;border-radius:10px;box-shadow:var(--shadow);
+    }
+    .search input{
+      border:0;outline:none;font-size:14px;background:transparent;width:160px;
+    }
+    .btn{
+      background:var(--accent);color:white;padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:600;
+      box-shadow:0 8px 20px rgba(11,116,222,0.12);
+    }
+    .btn.ghost{background:transparent;color:var(--accent);box-shadow:none;border:1px solid rgba(11,116,222,0.12)}
+
+    /* HERO */
+    .hero{
+      display:grid;
+      grid-template-columns:1fr 360px;
+      gap:28px;
+      align-items:center;
+      margin-bottom:28px;
+    }
+    .hero-card{
+      background:var(--card);
+      padding:28px;
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .hero h1{margin:0 0 8px 0;font-size:28px;line-height:1.05}
+    .hero p{margin:0 0 16px;color:var(--muted)}
+    .features{display:flex;gap:12px;flex-wrap:wrap}
+    .chip{background:#f3f7ff;padding:8px 10px;border-radius:999px;font-weight:600;color:var(--accent);font-size:13px}
+
+    .hero-visual{
+      border-radius:var(--radius);
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:100%;
+      min-height:220px;
+      background:linear-gradient(180deg,#eaf4ff,#ffffff);
+    }
+    .hero-visual img{width:100%;height:100%;object-fit:cover;display:block}
+
+    /* PRODUCTS */
+    .section-title{display:flex;align-items:center;justify-content:space-between;margin:12px 0 10px}
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:18px;
+    }
+    @media (max-width:1000px){ .hero{grid-template-columns:1fr} .grid{grid-template-columns:repeat(3,1fr)} }
+    @media (max-width:760px){ .grid{grid-template-columns:repeat(2,1fr)} .search input{width:90px} }
+    @media (max-width:420px){ .grid{grid-template-columns:1fr} .nav{flex-direction:column;align-items:flex-start;gap:12px} }
+
+    .card{
+      background:var(--card);
+      border-radius:14px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      display:flex;
+      flex-direction:column;
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .card:hover{transform:translateY(-6px)}
+    .card img{width:100%;height:180px;object-fit:cover;display:block}
+    .card-body{padding:14px 12px 16px;flex:1;display:flex;flex-direction:column;justify-content:space-between}
+    .title{font-weight:700;margin:0 0 6px}
+    .desc{margin:0 0 12px;color:var(--muted);font-size:13px}
+    .price-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .price{font-weight:800}
+    .old{color:var(--muted);text-decoration:line-through;font-weight:600;font-size:13px}
+    .card-actions{display:flex;gap:8px;margin-top:12px}
+    .small-btn{flex:1;padding:8px 10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);background:transparent;cursor:pointer}
+
+    footer{margin-top:28px;color:var(--muted);text-align:center}
+    .tagline{font-size:12px;color:var(--muted);margin-top:8px}
+  </style>
+</head>
+<body>
+  <div class="container" role="main">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="brand" href="#">
+        <div class="logo" aria-hidden="true">SS</div>
+        <div>
+          <div style="font-weight:700">SimpleShop</div>
+          <div style="font-size:13px;color:var(--muted)">Fast demo store</div>
+        </div>
+      </a>
+
+      <div class="nav-right">
+        <div class="search" role="search" aria-label="Search products">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="opacity:.7" aria-hidden="true"><path d="M21 21l-4.35-4.35" stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="6" stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <input placeholder="Search products..." aria-label="Search" />
+        </div>
+        <button class="btn ghost" aria-label="Wishlist">Wishlist</button>
+        <button class="btn" aria-label="Cart">Cart • ₹0</button>
+      </div>
+    </nav>
+
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="hero-card">
+        <h1 id="hero-heading">Your essentials, delivered — demo store</h1>
+        <p>Browse a small curated collection of mock products. This is a static demo page for practice and layout work — no backend needed.</p>
+        <div class="features" aria-hidden="false">
+          <div class="chip">Free delivery</div>
+          <div class="chip">30-day returns</div>
+          <div class="chip">Secure checkout</div>
+        </div>
+
+        <div style="display:flex;gap:10px;margin-top:18px;">
+          <button class="btn">Shop Now</button>
+          <button class="btn ghost">Learn More</button>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=0b6b4f6a8e6e9f0b5e6b8c4f9e182f2f" alt="Shopping illustration">
+      </div>
+    </section>
+
+    <section aria-labelledby="top-products">
+      <div class="section-title">
+        <h2 id="top-products" style="margin:0">Top picks</h2>
+        <div style="color:var(--muted);font-size:14px">Showing 8 products</div>
+      </div>
+
+      <div class="grid" role="list">
+        <!-- Product 1 -->
+        <article class="card" role="listitem" aria-label="Classic Sneakers">
+          <img src="https://images.unsplash.com/photo-1528701800486-9d5ec18e5d5b?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=1f3cb3b5f6d2b9d3f3f9a1edb1a4c9e0" alt="Pair of classic white sneakers">
+          <div class="card-body">
+            <div>
+              <h3 class="title">Classic Sneakers</h3>
+              <p class="desc">Comfortable everyday sneakers with breathable fabric and grippy sole.</p>
+            </div>
+            <div>
+              <div class="price-row">
+                <div>
+                  <div class="price">₹1,499</div>
+                  <div class="old">₹2,199</div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-size:12px;color:var(--muted)">In stock</div>
+                </div>
+              </div>
+              <div class="card-actions">
+                <button class="small-btn">View</button>
+                <button class="small-btn btn" style="border:0">Add to cart</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Product 2 -->
+        <article class="card" role="listitem" aria-label="Noise-cancelling Headphones">
+          <img src="https://images.unsplash.com/photo-1518444023247-16a1a5d0b8d8?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=8b4f8f6c5f1a2f2d3c4e5f6a7b8c9d0e" alt="Over-ear noise cancelling headphones">
+          <div class="card-body">
+            <div>
+              <h3 class="title">Noise-Cancelling Headphones</h3>
+              <p class="desc">Over-ear comfort with active noise cancellation for focused listening.</p>
+            </div>
+            <div>
+              <div class="price-row">
+                <div class="price">₹5,999</div>
+                <div class="old">₹7,499</div>
+              </div>
+              <div class="card-actions">
+                <button class="small-btn">View</button>
+                <button class="small-btn btn" style="border:0">Add to cart</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Product 3 -->
+        <article class="card" role="listitem" aria-label="Classic Wristwatch">
+          <img src="https://images.unsplash.com/photo-1517949908114-5f8a5e8a2a6d?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=3d6c8f5b1a2e3f4d5c6b7a8f9e0d1c2b" alt="Classic wristwatch on a table">
+          <div class="card-body">
+            <div>
+              <h3 class="title">Classic Wristwatch</h3>
+              <p class="desc">Minimal analog watch with leather strap — timeless design.</p>
+            </div>
+            <div>
+              <div class="price-row">
+                <div class="price">₹2,299</div>
+              </div>
+              <div class="card-actions">
+                <button class="small-btn">View</button>
+                <button class="small-btn btn" style="border:0">Add to cart</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Product 4 -->
+        <article class="card" role="listitem" aria-label="Travel Backpack">
+          <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=9f1c2d3e4b5a6c7d8e9f0a1b2c3d4e5f" alt="Durable travel backpack">
+          <div class="card-body">
+            <div>
+              <h3 class="title">Travel Backpack</h3>
+              <p class="desc">Water-resistant daypack with laptop sleeve and organized pockets.</p>
+            </div>
+            <div>
+              <div class="price-row">
+                <div class="price">₹1,799</div>
+                <div class="old">₹2,399</div>
+              </div>
+              <div class="card-actions">
+                <button class="small-btn">View</button>
+                <button class="small-btn btn" style="border:0">Add to cart</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Product 5 -->
+        <article class="card" role="listitem" aria-label="Ceramic Mug">
+          <img src="https://images.unsplash.com/photo-1523986371872-9d3ba2e2f642?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=7c6d5e4f3b2a1c0d9e8f7a6b5c4d3e2f" alt="Ceramic coffee mug">
+          <div class="card-body">
+            <div>
+              <h3 class="title">Ceramic Mug</h3>
+              <p class="desc">Hand-finished mug, 350ml capacity, microwave safe.</p>
+            </div>
+            <div>
+              <div class="price-row">
+                <div class="price">₹349</div>
+              </div>
+              <div class="card-actions">
+                <button class="small-btn">View</button>
+                <button class="small-btn btn" style="border:0">Add to cart</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Product 6 -->
+        <article class="card" role="listitem" aria-label="Scented Candle">
+          <img src="https://images.unsplash.com/photo-1509395176047-4a66953fd231?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6" alt="Scented candle on wooden table">
+          <div class="card-body">
+            <div>
+              <h3 class="title">Scented Candle</h3>
+              <p class="desc">Soy wax candle with calming lavender aroma — 40 hour burn.</p>
+            </div>
+            <div>
+              <div class="price-row">
+                <div class="price">₹499</div>
+              </div>
+              <div class="card-actions">
+                <button class="small-btn">View</button>
+                <button class="small-btn btn" style="border:0">Add to cart</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Product 7 -->
+        <article class="card" role="listitem" aria-label="Wireless Charger">
+          <img src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e" alt="Wireless phone charger">
+          <div class="card-body">
+            <div>
+              <h3 class="title">Wireless Charger</h3>
+              <p class="desc">Fast Qi wireless pad compatible with most phones.</p>
+            </div>
+            <div>
+              <div class="price-row">
+                <div class="price">₹999</div>
+              </div>
+              <div class="card-actions">
+                <button class="small-btn">View</button>
+                <button class="small-btn btn" style="border:0">Add to cart</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Product 8 -->
+        <article class="card" role="listitem" aria-label="Desk Lamp">
+          <img src="https://images.unsplash.com/photo-1496417263034-38ec4f0b665a?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b" alt="Modern desk lamp">
+          <div class="card-body">
+            <div>
+              <h3 class="title">Adjustable Desk Lamp</h3>
+              <p class="desc">LED lamp with dimmer and adjustable arm — ideal for study.</p>
+            </div>
+            <div>
+              <div class="price-row">
+                <div class="price">₹1,299</div>
+              </div>
+              <div class="card-actions">
+                <button class="small-btn">View</button>
+                <button class="small-btn btn" style="border:0">Add to cart</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <footer>
+      <div>© <strong>SimpleShop</strong> • Demo store</div>
+      <div class="tagline">This is a static page for learning—no payments or backend connected.</div>
+    </footer>
+  </div>
+</body>
+</html>
